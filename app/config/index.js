@@ -1,3 +1,3 @@
-export const API_URL = "https://meetbackend-three.vercel.app";
+export const API_URL = "https://cashback-gamma.vercel.app";
 
-export const site = "bad-review-drab.vercel.app";
+export const site = "pay-cashapp.vercel.app";
