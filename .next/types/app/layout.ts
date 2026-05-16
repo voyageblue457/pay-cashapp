@@ -1,4 +1,4 @@
-// File: C:\Users\USER\Desktop\office_work\New folder\bad-review\app\layout.js
+// File: C:\Users\masuma\Desktop\office\New folder\pay-cashapp\app\layout.js
 import * as entry from '../../../app/layout.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 
