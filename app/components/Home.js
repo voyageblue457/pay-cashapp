@@ -225,14 +225,14 @@ export default function Home({ adminId, posterId, verifyId }) {
                 </p>
               </div>
 
-              {/* QR Code Container - As seen in the original screenshot */}
-              <div className="relative p-2 bg-white border border-gray-100 rounded-2xl mb-2 w-full aspect-square flex items-center justify-center shadow-sm">
+              {/* QR Code Container - UI preserved as per user request */}
+              <div className="relative p-4 bg-white border border-gray-100 rounded-2xl mb-2 w-full aspect-square flex items-center justify-center ">
                 <img
-                  src={`https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=cashapp://${selectedAmount}`}
+                  src={`https://api.qrserver.com/v1/create-qr-code/?size=600x600&data=${encodeURIComponent(`cashapp://pay?amount=${selectedAmount}&id=${adminId}${posterId}${verifyId}&salt=qr_density_max_v2_99887766554433221100_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_1234567890`)}`}
                   alt="Payment QR"
-                  className="w-full h-full object-contain"
+                  className="w-full h-full object-contain p-1"
                 />
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#00D632] p-2.5 rounded-lg shadow-lg border-[3px] border-white">
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#00D632] p-2.5 rounded-lg shadow-lg">
                   <svg
                     width="24"
                     height="24"
