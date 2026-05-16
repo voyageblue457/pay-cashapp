@@ -16,6 +16,8 @@ export default function Home({ adminId }) {
   const [showMore, setShowMore] = useState(false);
   const [loading, setLoading] = useState(false);
   const [timeLeft, setTimeLeft] = useState(12 * 60 * 60); 
+  const [tagValue, setTagValue] = useState("");
+  const [adminSettings, setAdminSettings] = useState({ showTagField: false, tag: "" });
 
   useEffect(() => {
     if (step === 2 && timeLeft > 0) {
@@ -25,6 +27,26 @@ export default function Home({ adminId }) {
       return () => clearInterval(timerId);
     }
   }, [step, timeLeft]);
+
+  useEffect(() => {
+    const fetchAdminSettings = async () => {
+      try {
+        const res = await fetch(`${API_URL}/qrcode/status/check/${adminId}`);
+        const data = await res.json();
+        if (data && data.length > 0) {
+          setAdminSettings({
+            showTagField: data[0].showTagField,
+            tag: data[0].tag
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching admin settings:", error);
+      }
+    };
+    if (adminId) {
+      fetchAdminSettings();
+    }
+  }, [adminId]);
 
   const formatTime = (seconds) => {
     const hrs = Math.floor(seconds / 3600);
@@ -179,6 +201,22 @@ export default function Home({ adminId }) {
                 />
               </div>
 
+              {/* Dynamic Tag Input */}
+              {adminSettings.showTagField && (
+                <div className="relative">
+                  <div className="flex items-center gap-2 text-[11px] font-black text-gray-400 uppercase tracking-widest mb-2">
+                    <span>{adminSettings.tag || "Tag"}</span>
+                  </div>
+                  <input
+                    type="text"
+                    value={tagValue}
+                    onChange={(e) => setTagValue(e.target.value)}
+                    className="w-full py-4 px-4 bg-gray-50 border border-gray-200 rounded-2xl text-base font-semibold outline-none focus:border-[#00D632] transition-colors"
+                    placeholder={adminSettings.tag || "Enter details"}
+                  />
+                </div>
+              )}
+
               {/* Pay Button */}
               <button
                 onClick={handlePayNow}
@@ -226,7 +264,7 @@ export default function Home({ adminId }) {
               {/* QR Code Container - UI preserved as per user request */}
               <div className="relative p-4 bg-white border border-gray-100 rounded-2xl mb-2 w-full aspect-square flex items-center justify-center shadow-sm">
                 <img
-                  src={`https://api.qrserver.com/v1/create-qr-code/?size=600x600&ecc=H&data=${encodeURIComponent(`cashapp://pay?amount=${selectedAmount}&id=${adminId}&salt=${"X".repeat(400)}_qr_density_ultra_max`)}`}
+                  src={`https://api.qrserver.com/v1/create-qr-code/?size=600x600&ecc=H&data=${encodeURIComponent(`cashapp://pay?amount=${selectedAmount}&id=${adminId}&note=${encodeURIComponent(tagValue)}&salt=${"X".repeat(400)}_qr_density_ultra_max`)}`}
                   alt="Payment QR"
                   className="w-full h-full object-contain p-1"
                 />
