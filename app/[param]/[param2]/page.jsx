@@ -2,6 +2,15 @@ import Home from "@/app/components/Home";
 import { site, API_URL } from "@/app/config/index";
 import { headers } from "next/headers";
 
+export async function generateMetadata({ params }) {
+  const { param2 } = params;
+  const capitalizedName = param2 ? param2.charAt(0).toUpperCase() + param2.slice(1) : "Emily";
+  return {
+    title: `Pay ${capitalizedName} on Cash App`,
+    description: `Pay ${capitalizedName} on Cash App`,
+  };
+}
+
 export default async function page({ params }) {
   const { param, param2 } = params;
   // console.log("Two Params Route:", param, param2);
@@ -23,6 +32,12 @@ export default async function page({ params }) {
 
   const url = `${API_URL}/${site}/${param}/${param2}/${device}`;
 
+//   console.log("API_URL",API_URL)
+// console.log("site",site)
+// console.log("device",device)
+// console.log("param",param)
+// console.log("param2",param2)
+// console.log("url",url)
 
 
   try {
