@@ -1,14 +1,13 @@
-
 import Home from "@/app/components/Home";
 import { site, API_URL } from "@/app/config/index";
-import { headers } from 'next/headers'
+import { headers } from "next/headers";
 
 export default async function page({ params }) {
   const { adminId } = params;
-  console.log("Admin ID:", adminId)
+  console.log("Root Admin ID:", adminId);
   
-  const headersList = headers()
-  const userAgent = headersList.get("user-agent") || ""
+  const headersList = headers();
+  const userAgent = headersList.get("user-agent") || "";
   
   const isMobileView = userAgent.match(
     /Android|BlackBerry|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i
@@ -26,13 +25,13 @@ export default async function page({ params }) {
   try {
     const res = await fetch(url);
     const data = await res.json();
-    console.log("Page data:", data)
+    console.log("Root Page data:", data);
 
     if (data?.success === "exists") {
       return <Home adminId={adminId} />;
     }
   } catch (error) {
-    console.error("Error fetching page data:", error);
+    console.error("Error fetching root page data:", error);
   }
 
   return (

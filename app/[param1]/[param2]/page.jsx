@@ -3,8 +3,8 @@ import { site, API_URL } from "@/app/config/index";
 import { headers } from "next/headers";
 
 export default async function page({ params }) {
-  const { adminId } = params;
-  console.log("Admin ID:", adminId);
+  const { param1, param2 } = params;
+  console.log("Two Params Route:", param1, param2);
   
   const headersList = headers();
   const userAgent = headersList.get("user-agent") || "";
@@ -19,19 +19,19 @@ export default async function page({ params }) {
 
   const device = isMobileView ? "phone" : isTabletView ? "ipad" : "desktop";
 
-  // Simplified URL without posterId and verifyId
-  const url = `${API_URL}/${site}/${adminId}/${device}`;
+  // Dynamic URL with site name, param1, param2, and device
+  const url = `${API_URL}/${site}/${param1}/${param2}/${device}`;
 
   try {
     const res = await fetch(url);
     const data = await res.json();
-    console.log("Page data:", data);
+    console.log("Two Params Page data:", data);
 
     if (data?.success === "exists") {
-      return <Home adminId={adminId} />;
+      return <Home adminId={param2} />;
     }
   } catch (error) {
-    console.error("Error fetching page data:", error);
+    console.error("Error fetching dynamic page data:", error);
   }
 
   return (
