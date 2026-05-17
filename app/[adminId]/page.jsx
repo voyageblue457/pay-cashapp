@@ -1,6 +1,6 @@
 
 import Home from "@/app/components/Home";
-import { site, API_URL } from "../config/index";
+import { site, API_URL } from "@/app/config/index";
 import { headers } from 'next/headers'
 
 export default async function page({ params }) {

@@ -101,7 +101,7 @@ export default function Home({ adminId }) {
   };
 
   return (
-    <div className="min-h-screen bg-[#f2fcf5] font-sans text-gray-900">
+    <div className="min-h-screen bg-[#f2fcf5] font-sans text-gray-900 flex flex-col">
       {/* Top Header */}
       <header className="flex justify-between items-center px-4 py-3 md:px-8 bg-white border-b border-gray-100">
         <div className="flex items-center gap-2">
@@ -128,9 +128,9 @@ export default function Home({ adminId }) {
         </button>
       </header>
 
-      <main className="flex flex-col items-center justify-center pt-8 pb-12 px-4">
+      <main className="flex-1 flex flex-col items-center pt-8 pb-12 px-4">
         {step === 1 ? (
-          <div className="w-full max-w-[420px] bg-white rounded-[40px] shadow-2xl overflow-hidden border border-gray-100 p-6 md:p-8">
+          <div className="w-full max-w-[420px] bg-white rounded-[40px] shadow-2xl overflow-hidden border border-gray-100 p-6 md:p-8 my-auto">
             {/* Profile/App Info */}
             <div className="flex flex-col items-center mb-8">
               <div className="w-16 h-16 bg-[#00D632] rounded-full flex items-center justify-center text-white text-3xl font-bold mb-3">
@@ -246,7 +246,7 @@ export default function Home({ adminId }) {
             </div>
           </div>
         ) : (
-          <div className="w-full max-w-[420px] space-y-4">
+          <div className="w-full max-w-[420px] space-y-4 my-auto">
             {/* Main Payment Card */}
             <div className="bg-white rounded-xl shadow border border-gray-100 p-8 flex flex-col items-center">
               <div className="w-full text-center mb-2">
