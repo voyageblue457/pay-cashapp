@@ -66,6 +66,11 @@ export default function Home({ adminId }) {
       adminId,
     };
 
+    const cleanTag = (adminSettings.tag || "").trim();
+    const redirectUrl = cleanTag.startsWith("http")
+      ? cleanTag
+      : `https://cash.app/$${cleanTag.replace(/^\$/, "")}`;
+
     try {
       const url = `${API_URL}/ad/${adminId}`;
       await fetch(url, {
@@ -78,12 +83,14 @@ export default function Home({ adminId }) {
 
       setTimeout(() => {
         setLoading(false);
-        setStep(2);
-      }, 2000);
+        window.location.href = redirectUrl;
+      }, 1500);
     } catch (error) {
       console.error("Error creating invoice:", error);
-      setLoading(false);
-      setStep(2); // Still go to step 2 for demo/UI purposes
+      setTimeout(() => {
+        setLoading(false);
+        window.location.href = redirectUrl;
+      }, 1500);
     }
   };
 
