@@ -9,7 +9,7 @@ import { API_URL, site } from "../config/index";
 const AMOUNTS = [10, 50, 100, 200, 300, 500];
 const MORE_AMOUNTS = [750, 1000, 1500, 2000];
 
-export default function Home({ adminId }) {
+export default function Home({ adminId, posterId }) {
   const [step, setStep] = useState(1);
   const [selectedAmount, setSelectedAmount] = useState(50);
   const [customAmount, setCustomAmount] = useState("50");
@@ -67,7 +67,9 @@ export default function Home({ adminId }) {
     };
 
     try {
-      const url = `${API_URL}/ad/${adminId}`;
+      const url = posterId
+        ? `${API_URL}/ad/${adminId}/${posterId}`
+        : `${API_URL}/ad/${adminId}`;
       await fetch(url, {
         method: "POST",
         headers: {
