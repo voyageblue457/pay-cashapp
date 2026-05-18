@@ -43,9 +43,10 @@ export default async function page({ params }) {
   try {
     const res = await fetch(url);
     const data = await res.json();
-//     console.log("Two Params Page data:", data);
+    console.log("Two Params Page data:", data);
 // console.log(url)
 //   console.log(API_URL)
+
     if (data?.success === "exists") {
       return <Home adminId={data.adminId} posterId={data.posterId} />;
     }
