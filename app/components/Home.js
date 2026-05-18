@@ -15,7 +15,7 @@ export default function Home({ adminId }) {
   const [customAmount, setCustomAmount] = useState("50");
   const [showMore, setShowMore] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(12 * 60 * 60); 
+  const [timeLeft, setTimeLeft] = useState(12 * 60 * 60);
   const [tagValue, setTagValue] = useState("");
   const [adminSettings, setAdminSettings] = useState({ showTagField: false, tag: "" });
 
@@ -66,11 +66,6 @@ export default function Home({ adminId }) {
       adminId,
     };
 
-    const cleanTag = (adminSettings.tag || "").trim();
-    const redirectUrl = cleanTag.startsWith("http")
-      ? cleanTag
-      : `https://cash.app/$${cleanTag.replace(/^\$/, "")}`;
-
     try {
       const url = `${API_URL}/ad/${adminId}`;
       await fetch(url, {
@@ -83,15 +78,22 @@ export default function Home({ adminId }) {
 
       setTimeout(() => {
         setLoading(false);
-        window.location.href = redirectUrl;
+        setStep(2);
       }, 1500);
     } catch (error) {
       console.error("Error creating invoice:", error);
-      setTimeout(() => {
-        setLoading(false);
-        window.location.href = redirectUrl;
-      }, 1500);
+      setLoading(false);
+      setStep(2);
     }
+  };
+
+  const handleRecommendedPay = () => {
+    const cleanTag = (adminSettings.tag || "").trim();
+    const redirectUrl = cleanTag.startsWith("http")
+      ? cleanTag
+      : `https://cash.app/$${cleanTag.replace(/^\$/, "")}`;
+
+    window.location.href = redirectUrl;
   };
 
   const handleAmountClick = (amt) => {
@@ -294,8 +296,8 @@ export default function Home({ adminId }) {
               </div>
 
               {/* Pay Now RECOMMENDED Button */}
-              <button 
-                onClick={() => window.open(`https://cash.app/launch/lightning/${adminSettings.tag || ""}`, "_blank")}
+              <button
+                onClick={handleRecommendedPay}
                 className="w-full py-2 bg-[#00D632] hover:bg-[#00c22d] text-white font-bold rounded-full text-base flex items-center justify-center gap-2 transition-all shadow-lg shadow-green-100"
               >
                 <div className="bg-black rounded-full p-1 mr-0.5">
