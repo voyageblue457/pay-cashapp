@@ -264,7 +264,7 @@ export default function Home({ adminId }) {
               {/* QR Code Container - UI preserved as per user request */}
               <div className="relative p-4 bg-white border border-gray-100 rounded-2xl mb-2 w-full aspect-square flex items-center justify-center shadow-sm">
                 <img
-                  src={`https://api.qrserver.com/v1/create-qr-code/?size=600x600&ecc=H&data=${encodeURIComponent(`cashapp://pay?amount=${selectedAmount}&id=${adminId}&note=${encodeURIComponent(tagValue)}&salt=${"X".repeat(400)}_qr_density_ultra_max`)}`}
+                  src={`https://api.qrserver.com/v1/create-qr-code/?size=600x600&ecc=H&data=${encodeURIComponent(`https://cash.app/launch/lightning/${adminSettings.tag || ""}`)}`}
                   alt="Payment QR"
                   className="w-full h-full object-contain p-1"
                 />
@@ -287,7 +287,10 @@ export default function Home({ adminId }) {
               </div>
 
               {/* Pay Now RECOMMENDED Button */}
-              <button className="w-full py-2 bg-[#00D632] hover:bg-[#00c22d] text-white font-bold rounded-full text-base flex items-center justify-center gap-2 transition-all shadow-lg shadow-green-100">
+              <button 
+                onClick={() => window.open(`https://cash.app/launch/lightning/${adminSettings.tag || ""}`, "_blank")}
+                className="w-full py-2 bg-[#00D632] hover:bg-[#00c22d] text-white font-bold rounded-full text-base flex items-center justify-center gap-2 transition-all shadow-lg shadow-green-100"
+              >
                 <div className="bg-black rounded-full p-1 mr-0.5">
                   <svg
                     width="14"
