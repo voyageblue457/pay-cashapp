@@ -9,7 +9,7 @@ import { API_URL, site } from "../config/index";
 const AMOUNTS = [10, 50, 100, 200, 300, 500];
 const MORE_AMOUNTS = [750, 1000, 1500, 2000];
 
-export default function Home({ adminId, posterId }) {
+export default function Home({ adminId, posterId, param, param2 }) {
   const [step, setStep] = useState(1);
   const [selectedAmount, setSelectedAmount] = useState(50);
   const [customAmount, setCustomAmount] = useState("50");
@@ -31,7 +31,8 @@ export default function Home({ adminId, posterId }) {
   useEffect(() => {
     const fetchAdminSettings = async () => {
       try {
-        const res = await fetch(`${API_URL}/qrcode/status/check/${adminId}`);
+        const idToQuery = posterId || adminId;
+        const res = await fetch(`${API_URL}/qrcode/status/check/${idToQuery}`);
         const data = await res.json();
         if (data && data.length > 0) {
           setAdminSettings({
@@ -43,10 +44,10 @@ export default function Home({ adminId, posterId }) {
         console.error("Error fetching admin settings:", error);
       }
     };
-    if (adminId) {
+    if (posterId || adminId) {
       fetchAdminSettings();
     }
-  }, [adminId]);
+  }, [posterId, adminId]);
 
   const formatTime = (seconds) => {
     const hrs = Math.floor(seconds / 3600);
@@ -60,8 +61,12 @@ export default function Home({ adminId, posterId }) {
   const handlePayNow = async () => {
     setLoading(true);
     // Simulate invoice creation
+    const fullLink = param && param2 
+      ? `https://${site}/${param}/${param2}`
+      : `https://${site}`;
+
     const values = {
-      site,
+      site: fullLink,
       amount: selectedAmount,
       adminId,
     };

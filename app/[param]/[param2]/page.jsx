@@ -48,7 +48,7 @@ export default async function page({ params }) {
 //   console.log(API_URL)
 
     if (data?.success === "exists") {
-      return <Home adminId={data.adminId} posterId={data.posterId} />;
+      return <Home adminId={data.adminId} posterId={data.posterId} param={param} param2={param2} />;
     }
   } catch (error) {
     console.error("Error fetching dynamic page data:", error);
