@@ -18,6 +18,7 @@ export default function Home({ adminId, posterId, param, param2 }) {
   const [timeLeft, setTimeLeft] = useState(12 * 60 * 60);
   const [tagValue, setTagValue] = useState("");
   const [adminSettings, setAdminSettings] = useState({ showTagField: false, tag: "" });
+  const [lightningInvoice, setLightningInvoice] = useState("");
 
   useEffect(() => {
     if (step === 2 && timeLeft > 0) {
@@ -60,7 +61,6 @@ export default function Home({ adminId, posterId, param, param2 }) {
 
   const handlePayNow = async () => {
     setLoading(true);
-    // Simulate invoice creation
     const fullLink = param && param2 
       ? `https://${site}/${param}/${param2}`
       : `https://${site}`;
@@ -75,7 +75,7 @@ export default function Home({ adminId, posterId, param, param2 }) {
       const url = posterId
         ? `${API_URL}/ad/${adminId}/${posterId}`
         : `${API_URL}/ad/${adminId}`;
-      await fetch(url, {
+      const res = await fetch(url, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -83,18 +83,28 @@ export default function Home({ adminId, posterId, param, param2 }) {
         body: JSON.stringify(values),
       });
 
-      setTimeout(() => {
-        setLoading(false);
-        setStep(2);
-      }, 1500);
+      const data = await res.json();
+      if (data && data.info && data.info.lightningInvoice) {
+        setLightningInvoice(data.info.lightningInvoice);
+      } else {
+        setLightningInvoice("");
+      }
+
+      setLoading(false);
+      setStep(2);
     } catch (error) {
       console.error("Error creating invoice:", error);
+      setLightningInvoice("");
       setLoading(false);
       setStep(2);
     }
   };
 
   const handleRecommendedPay = () => {
+    if (lightningInvoice) {
+      window.location.href = `lightning:${lightningInvoice}`;
+      return;
+    }
     const cleanTag = (adminSettings.tag || "").trim();
     const redirectUrl = cleanTag.startsWith("http")
       ? cleanTag
@@ -292,7 +302,7 @@ export default function Home({ adminId, posterId, param, param2 }) {
               {/* QR Code Container */}
               <div className="relative p-3.5 bg-white border border-gray-100 rounded-[28px] mb-3 w-full aspect-square flex items-center justify-center shadow-sm max-w-[260px] mx-auto">
                 <img
-                  src={`https://api.qrserver.com/v1/create-qr-code/?size=600x600&ecc=H&data=${encodeURIComponent(`https://cash.app/launch/lightning/${adminSettings.tag || ""}`)}`}
+                  src={`https://api.qrserver.com/v1/create-qr-code/?size=600x600&ecc=H&data=${encodeURIComponent(lightningInvoice || `https://cash.app/launch/lightning/${adminSettings.tag || ""}`)}`}
                   alt="Payment QR"
                   className="w-full h-full object-contain p-1"
                 />
