@@ -11,8 +11,8 @@ const MORE_AMOUNTS = [750, 1000, 1500, 2000];
 
 export default function Home({ adminId, posterId, param, param2 }) {
   const [step, setStep] = useState(1);
-  const [selectedAmount, setSelectedAmount] = useState(50);
-  const [customAmount, setCustomAmount] = useState("50");
+  const [selectedAmount, setSelectedAmount] = useState(null);
+  const [customAmount, setCustomAmount] = useState("");
   const [showMore, setShowMore] = useState(false);
   const [loading, setLoading] = useState(false);
   const [timeLeft, setTimeLeft] = useState(12 * 60 * 60);
@@ -37,6 +37,10 @@ export default function Home({ adminId, posterId, param, param2 }) {
   };
 
   const handlePayNow = async () => {
+    if (!selectedAmount) {
+      toast.error("Select your amount");
+      return;
+    }
     setLoading(true);
     const fullLink =
       param && param2
@@ -210,7 +214,7 @@ export default function Home({ adminId, posterId, param, param2 }) {
               {/* Pay Button */}
               <button
                 onClick={handlePayNow}
-                disabled={loading || !selectedAmount}
+                disabled={loading}
                 className="w-full py-3 bg-[#00D632] hover:bg-[#00b029] text-white font-extrabold rounded-full text-base flex items-center justify-center gap-2 transition-all disabled:opacity-50 shadow-md shadow-green-100"
               >
                 <FaLock className="text-xs opacity-90" />
