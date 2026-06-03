@@ -4,7 +4,11 @@ import { headers } from "next/headers";
 
 export async function generateMetadata({ params }) {
   const { param2 } = params;
+  const headersList = headers();
+  const host = headersList.get("host") || "py-cash.online";
+
   return {
+    metadataBase: new URL(`https://${host}`),
     title: param2 || "Cash App",
     description: `Pay me on Cash App — Instantly exchange money for free on Cash App`,
   };
