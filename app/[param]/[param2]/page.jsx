@@ -4,10 +4,9 @@ import { headers } from "next/headers";
 
 export async function generateMetadata({ params }) {
   const { param2 } = params;
-  const capitalizedName = param2 ? param2.charAt(0).toUpperCase() + param2.slice(1) : "Emily";
   return {
-    title: `Pay ${capitalizedName} on Cash App`,
-    description: `Pay ${capitalizedName} on Cash App`,
+    title: param2 || "Cash App",
+    description: `Pay me on Cash App — Instantly exchange money for free on Cash App`,
   };
 }
 
