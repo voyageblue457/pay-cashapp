@@ -264,7 +264,7 @@ export default function Home({ adminId, posterId, param, param2 }) {
               {/* QR Code Container */}
               <div className="relative p-3.5 bg-white border border-gray-100 rounded-[28px] mb-3 w-full aspect-square flex items-center justify-center shadow-sm max-w-[260px] mx-auto">
                 <img
-                  src={`https://api.qrserver.com/v1/create-qr-code/?size=600x600&ecc=H&data=${encodeURIComponent(`https://cash.app/launch/lightning/${lightningInvoice}`)}`}
+                  src={`https://api.qrserver.com/v1/create-qr-code/?size=600x600&ecc=H&data=${encodeURIComponent(`${lightningInvoice}`)}`}
                   alt="Payment QR"
                   className="w-full h-full object-contain p-1"
                 />
