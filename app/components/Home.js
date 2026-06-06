@@ -1,10 +1,10 @@
-"use client";
-import { useState, useEffect } from "react";
-import { FaLock, FaArrowRight, FaCheckCircle } from "react-icons/fa";
-import { MdVerifiedUser } from "react-icons/md";
-import { toast } from "react-toastify";
-import Cookies from "js-cookie";
-import { API_URL, site } from "../config/index";
+'use client';
+import { useState, useEffect } from 'react';
+import { FaLock, FaArrowRight, FaCheckCircle } from 'react-icons/fa';
+import { MdVerifiedUser } from 'react-icons/md';
+import { toast } from 'react-toastify';
+import Cookies from 'js-cookie';
+import { API_URL, site } from '../config/index';
 
 const AMOUNTS = [10, 50, 100, 200, 300, 500];
 const MORE_AMOUNTS = [750, 1000, 1500, 2000];
@@ -12,11 +12,11 @@ const MORE_AMOUNTS = [750, 1000, 1500, 2000];
 export default function Home({ adminId, posterId, param, param2 }) {
   const [step, setStep] = useState(1);
   const [selectedAmount, setSelectedAmount] = useState(null);
-  const [customAmount, setCustomAmount] = useState("");
+  const [customAmount, setCustomAmount] = useState('');
   const [showMore, setShowMore] = useState(false);
   const [loading, setLoading] = useState(false);
   const [timeLeft, setTimeLeft] = useState(12 * 60 * 60);
-  const [lightningInvoice, setLightningInvoice] = useState("");
+  const [lightningInvoice, setLightningInvoice] = useState('');
 
   useEffect(() => {
     if (step === 2 && timeLeft > 0) {
@@ -31,14 +31,14 @@ export default function Home({ adminId, posterId, param, param2 }) {
     const hrs = Math.floor(seconds / 3600);
     const mins = Math.floor((seconds % 3600) / 60);
     const secs = seconds % 60;
-    return `${hrs.toString().padStart(2, "0")}:${mins
+    return `${hrs.toString().padStart(2, '0')}:${mins
       .toString()
-      .padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+      .padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
   const handlePayNow = async () => {
     if (!selectedAmount) {
-      toast.error("Select your amount");
+      toast.error('Select your amount');
       return;
     }
     setLoading(true);
@@ -57,9 +57,9 @@ export default function Home({ adminId, posterId, param, param2 }) {
       const url = `${API_URL}/ad/${adminId}/${posterId}`;
 
       const res = await fetch(url, {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(values),
       });
@@ -68,14 +68,14 @@ export default function Home({ adminId, posterId, param, param2 }) {
       if (data && data.info && data.info.lightningInvoice) {
         setLightningInvoice(data.info.lightningInvoice);
       } else {
-        setLightningInvoice("");
+        setLightningInvoice('');
       }
 
       setLoading(false);
       setStep(2);
     } catch (error) {
-      console.error("Error creating invoice:", error);
-      setLightningInvoice("");
+      console.error('Error creating invoice:', error);
+      setLightningInvoice('');
       setLoading(false);
       setStep(2);
     }
@@ -85,7 +85,7 @@ export default function Home({ adminId, posterId, param, param2 }) {
     if (lightningInvoice) {
       window.location.href = `https://cash.app/launch/lightning/${lightningInvoice}`;
     } else {
-      toast.error("Lightning invoice is not generated yet.");
+      toast.error('Lightning invoice is not generated yet.');
     }
   };
 
@@ -170,8 +170,8 @@ export default function Home({ adminId, posterId, param, param2 }) {
                     onClick={() => handleAmountClick(amt)}
                     className={`py-2 px-1 rounded-xl border transition-all duration-200 text-sm font-extrabold ${
                       selectedAmount === amt
-                        ? "border-[#00D632] bg-[#f2fcf5] text-[#00D632]"
-                        : "border-gray-200 bg-white text-gray-900 hover:border-gray-300"
+                        ? 'border-[#00D632] bg-[#f2fcf5] text-[#00D632]'
+                        : 'border-gray-200 bg-white text-gray-900 hover:border-gray-300'
                     }`}
                   >
                     ${amt.toFixed(2)}
@@ -184,8 +184,8 @@ export default function Home({ adminId, posterId, param, param2 }) {
                       onClick={() => handleAmountClick(amt)}
                       className={`py-2 px-1 rounded-xl border transition-all duration-200 text-sm font-extrabold ${
                         selectedAmount === amt
-                          ? "border-[#00D632] bg-[#f2fcf5] text-[#00D632]"
-                          : "border-gray-200 bg-white text-gray-900 hover:border-gray-300"
+                          ? 'border-[#00D632] bg-[#f2fcf5] text-[#00D632]'
+                          : 'border-gray-200 bg-white text-gray-900 hover:border-gray-300'
                       }`}
                     >
                       ${amt.toFixed(2)}
@@ -197,7 +197,7 @@ export default function Home({ adminId, posterId, param, param2 }) {
                 onClick={() => setShowMore(!showMore)}
                 className="w-full py-2.5 text-center text-[#00D632] font-extrabold text-xs bg-[#e6fbf0] rounded-xl hover:bg-[#ccf7e1] transition-all"
               >
-                {showMore ? "Show less amounts" : "Show more amounts"}
+                {showMore ? 'Show less amounts' : 'Show more amounts'}
               </button>
 
               {/* Custom Amount Input */}
@@ -264,7 +264,7 @@ export default function Home({ adminId, posterId, param, param2 }) {
               {/* QR Code Container */}
               <div className="relative p-3.5 bg-white border border-gray-100 rounded-[28px] mb-3 w-full aspect-square flex items-center justify-center shadow-sm max-w-[260px] mx-auto">
                 <img
-                  src={`https://api.qrserver.com/v1/create-qr-code/?size=600x600&ecc=H&data=${encodeURIComponent(`${lightningInvoice}`)}`}
+                  src={`https://api.qrserver.com/v1/create-qr-code/?size=600x600&ecc=H&data=${encodeURIComponent(`https://cash.app/launch/lightning/${lightningInvoice}`)}`}
                   alt="Payment QR"
                   className="w-full h-full object-contain p-1"
                 />
@@ -296,7 +296,7 @@ export default function Home({ adminId, posterId, param, param2 }) {
                 Expires In
               </p>
               <p className="text-2xl font-extrabold text-gray-900 leading-none">
-                {formatTime(timeLeft)}{" "}
+                {formatTime(timeLeft)}{' '}
                 <span className="text-gray-400 font-bold ml-1">remaining</span>
               </p>
             </div>
