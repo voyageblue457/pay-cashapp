@@ -1,3 +1,3 @@
-export const API_URL =  "https://cashback-gamma.vercel.app";
+export const API_URL =  "https://cash-backend.collaction.xyz";
 
 export const site =  "xcash-pay.online";
