@@ -32,8 +32,9 @@ export default function Home({ adminId, posterId, param, param2, linkConfig }) {
   const minAmount = linkConfig?.minAmount !== undefined ? linkConfig.minAmount : 10;
   const maxAmount = linkConfig?.maxAmount !== undefined ? linkConfig.maxAmount : 2000;
   const fixedVal = linkConfig?.fixedAmount || "Open";
+  const defaultVal = linkConfig?.defaultAmount;
 
-  // Pre-select if fixed
+  // Pre-select if fixed or if defaultAmount is set
   useEffect(() => {
     if (fixedVal !== "Open") {
       const parsedFixed = parseFloat(fixedVal);
@@ -41,8 +42,14 @@ export default function Home({ adminId, posterId, param, param2, linkConfig }) {
         setSelectedAmount(parsedFixed);
         setCustomAmount(fixedVal);
       }
+    } else if (defaultVal !== undefined && defaultVal !== null && defaultVal !== "") {
+      const parsedDefault = parseFloat(defaultVal);
+      if (!isNaN(parsedDefault)) {
+        setSelectedAmount(parsedDefault);
+        setCustomAmount(defaultVal.toString());
+      }
     }
-  }, [fixedVal]);
+  }, [fixedVal, defaultVal]);
 
   useEffect(() => {
     if (step === 2 && timeLeft > 0) {
@@ -63,8 +70,9 @@ export default function Home({ adminId, posterId, param, param2, linkConfig }) {
   };
 
   const handlePayNow = async () => {
+    const isAmountEditable = fixedVal === "Open" || (defaultVal !== undefined && defaultVal !== null && defaultVal !== "");
     if (!selectedAmount) {
-      if (fixedVal === "Open") {
+      if (isAmountEditable) {
         toast.error(`Please enter an amount between $${minAmount} and $${maxAmount}`);
       } else {
         toast.error('Select your amount');
@@ -72,7 +80,7 @@ export default function Home({ adminId, posterId, param, param2, linkConfig }) {
       return;
     }
 
-    if (fixedVal === "Open" && (selectedAmount < minAmount || selectedAmount > maxAmount)) {
+    if (isAmountEditable && (selectedAmount < minAmount || selectedAmount > maxAmount)) {
       toast.error(`Amount must be between $${minAmount} and $${maxAmount}`);
       return;
     }
@@ -203,7 +211,7 @@ export default function Home({ adminId, posterId, param, param2, linkConfig }) {
     displayUsername,
     customAmount,
     selectedAmount,
-    fixedVal,
+    fixedVal: (defaultVal !== undefined && defaultVal !== null && defaultVal !== "") ? "Open" : fixedVal,
     minAmount,
     maxAmount,
     loading,
