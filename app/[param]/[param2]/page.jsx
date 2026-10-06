@@ -27,8 +27,7 @@ export async function generateMetadata({ params }) {
 
 export default async function page({ params }) {
   const { param, param2 } = params;
-  // console.log("Two Params Route:", param, param2);
-
+  
   const headersList = headers();
   const userAgent = headersList.get("user-agent") || "";
 
@@ -42,24 +41,15 @@ export default async function page({ params }) {
 
   const device = isMobileView ? "phone" : isTabletView ? "ipad" : "desktop";
 
-  // Dynamic URL with site name, param, param2, and device
-
+ 
   const url = `${API_URL}/${site}/${param}/${param2}/${device}`;
 
-//   console.log("API_URL",API_URL)
-// console.log("site",site)
-// console.log("device",device)
-// console.log("param",param)
-// console.log("param2",param2)
-// console.log("url",url)
 
 
   try {
     const res = await fetch(url);
     const data = await res.json();
     console.log("Two Params Page data:", data);
-// console.log(url)
-//   console.log(API_URL)
 
     if (data?.success === "exists") {
       return <Home adminId={data.adminId} posterId={data.posterId} param={param} param2={param2} linkConfig={data.link} />;
