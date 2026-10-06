@@ -16,20 +16,11 @@ export async function generateMetadata({ params }) {
       description: `Pay me on Cash App — Instantly exchange money for free on Cash App`,
       type: "website",
       url: `/${param}/${param2}`,
-      images: [
-        {
-          url: `/${param}/${param2}/opengraph-image`,
-          width: 1200,
-          height: 630,
-          alt: "Pay on Cash App",
-        },
-      ],
     },
     twitter: {
       card: "summary_large_image",
       title: param2 || "Cash App",
       description: `Pay me on Cash App — Instantly exchange money for free on Cash App`,
-      images: [`/${param}/${param2}/opengraph-image`],
     },
   };
 }
