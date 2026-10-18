@@ -8,6 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || "https://py-cash.online"),
   title: "Pay Emily on Cash App",
   description: "Pay Emily on Cash App",
 };

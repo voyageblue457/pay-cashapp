@@ -1,6 +1,5 @@
 import { ImageResponse } from "next/og";
 
-export const runtime = "edge";
 
 export const alt = "Pay on Cash App";
 export const size = {
@@ -11,9 +10,8 @@ export const size = {
 export const contentType = "image/png";
 
 export default async function Image({ params }) {
-  const { param2 } = params;
-
-  const name = param2 || "CashApp";
+  const resolvedParams = await params;
+  const name = resolvedParams?.param2 || "CashApp";
   const firstLetter = name.charAt(0).toUpperCase();
 
   return new ImageResponse(
@@ -102,7 +100,6 @@ export default async function Image({ params }) {
               fontWeight: "bold",
               color: "#121214",
               marginBottom: "8px",
-              letterSpacing: "-0.02em",
             }}
           >
             {name}

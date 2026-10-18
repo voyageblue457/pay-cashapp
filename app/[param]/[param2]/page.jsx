@@ -3,24 +3,44 @@ import { site, API_URL } from "@/app/config/index";
 import { headers } from "next/headers";
 
 export async function generateMetadata({ params }) {
-  const { param, param2 } = params;
+  const resolvedParams = await params;
+  const { param, param2 } = resolvedParams || {};
   const headersList = headers();
-  const host = headersList.get("host") || "py-cash.online";
+  const host =
+    headersList.get("x-forwarded-host") ||
+    headersList.get("host") ||
+    "py-cash.online";
+  const proto = headersList.get("x-forwarded-proto") || "https";
+
+  const baseUrl = `${proto}://${host}`;
+  const title = param2 || "Cash App";
+  const description =
+    "Pay me on Cash App — Instantly exchange money for free on Cash App";
+  const imageUrl = `/${param}/${param2}/opengraph-image`;
 
   return {
-    metadataBase: new URL(`https://${host}`),
-    title: param2 || "Cash App",
-    description: `Pay me on Cash App — Instantly exchange money for free on Cash App`,
+    metadataBase: new URL(baseUrl),
+    title,
+    description,
     openGraph: {
-      title: param2 || "Cash App",
-      description: `Pay me on Cash App — Instantly exchange money for free on Cash App`,
+      title,
+      description,
       type: "website",
       url: `/${param}/${param2}`,
+      images: [
+        {
+          url: imageUrl,
+          width: 1200,
+          height: 630,
+          alt: "Pay on Cash App",
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",
-      title: param2 || "Cash App",
-      description: `Pay me on Cash App — Instantly exchange money for free on Cash App`,
+      title,
+      description,
+      images: [imageUrl],
     },
   };
 }
